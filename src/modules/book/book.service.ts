@@ -40,6 +40,16 @@ export class BookService {
   }
 
   async update(id: string, updateBookDto: UpdateBookDto) {
+    const existsBook = await this.prisma.book.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existsBook) {
+      throw new Error('Book does not exists!');
+    }
+
     const book = await this.prisma.book.update({
       where: {
         id,
